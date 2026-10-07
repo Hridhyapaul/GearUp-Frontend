@@ -4,6 +4,7 @@ import type {
   CurrentUserResponse,
   LoginPayload,
   RegisterPayload,
+  RegisterResponse,
 } from "@/types/auth";
 
 const loginUser = async (
@@ -17,8 +18,8 @@ const loginUser = async (
 
 const registerUser = async (
   payload: RegisterPayload,
-): Promise<AuthResponse> => {
-  return apiRequest<AuthResponse>("/auth/register", {
+): Promise<RegisterResponse> => {
+  return apiRequest<RegisterResponse>("/auth/register", {
     method: "POST",
     body: JSON.stringify(payload),
   });

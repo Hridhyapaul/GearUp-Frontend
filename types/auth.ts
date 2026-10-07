@@ -21,10 +21,30 @@ export interface RegisterPayload {
 
 export interface AuthResponse {
   success: boolean;
+  statusCode: number;
   message: string;
   data: {
     accessToken: string;
-    user: User;
+    loggedInUser: User;
+  };
+}
+
+export interface RegisteredUser {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    user: RegisteredUser;
   };
 }
 

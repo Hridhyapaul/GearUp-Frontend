@@ -50,7 +50,7 @@ const LoginForm = () => {
         return;
       }
 
-      const role = response.data.user.role;
+      const role = response.data.loggedInUser.role;
 
       if (role === "ADMIN") {
         router.push("/dashboard/admin");
