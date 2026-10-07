@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 import { loginAction } from "@/app/(authGroup)/auth/login/actions";
 
 const LoginForm = () => {
@@ -14,7 +18,9 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: React.SyntheticEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
 
     setError("");
@@ -65,36 +71,46 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email</label>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
 
-        <input
+        <Input
           id="email"
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Enter your email"
+          autoComplete="email"
         />
       </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
 
-        <input
+        <Input
           id="password"
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="Enter your password"
+          autoComplete="current-password"
         />
       </div>
 
-      {error && <p>{error}</p>}
+      {error && (
+        <p className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
 
-      <button type="submit" disabled={isLoading}>
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={isLoading}
+      >
         {isLoading ? "Logging in..." : "Login"}
-      </button>
+      </Button>
     </form>
   );
 };
