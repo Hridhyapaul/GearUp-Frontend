@@ -10,6 +10,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import { requireUser } from "@/lib/auth-guard";
 import { LogoutButton } from "./LogoutButton";
+import Link from "next/dist/client/link";
 
 const DashboardNavbar = async () => {
   const user = await requireUser();
@@ -26,13 +27,9 @@ const DashboardNavbar = async () => {
             </div>
 
             <div className="hidden text-left sm:block">
-              <p className="text-sm font-medium">
-                {user.name}
-              </p>
+              <p className="text-sm font-medium">{user.name}</p>
 
-              <p className="text-xs text-muted-foreground">
-                {user.role}
-              </p>
+              <p className="text-xs text-muted-foreground">{user.role}</p>
             </div>
           </button>
         </DropdownMenuTrigger>
@@ -50,8 +47,8 @@ const DashboardNavbar = async () => {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem>
-            Profile
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/profile">Profile</Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem>
