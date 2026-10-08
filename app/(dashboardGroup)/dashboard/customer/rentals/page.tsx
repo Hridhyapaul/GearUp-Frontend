@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { RentalOrder } from "@/types/rental-order";
+import { Button } from "@/components/ui/button";
 
 const CustomerRentalsPage = async () => {
   await requireRole(["CUSTOMER"]);
@@ -28,9 +29,7 @@ const CustomerRentalsPage = async () => {
   return (
     <main className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">
-          My Rentals
-        </h1>
+        <h1 className="text-3xl font-bold">My Rentals</h1>
 
         <p className="mt-2 text-muted-foreground">
           View and track your rental orders.
@@ -39,9 +38,7 @@ const CustomerRentalsPage = async () => {
 
       {rentalOrders.length === 0 ? (
         <div className="rounded-lg border p-8 text-center">
-          <h2 className="text-lg font-semibold">
-            No rentals found
-          </h2>
+          <h2 className="text-lg font-semibold">No rentals found</h2>
 
           <p className="mt-2 text-sm text-muted-foreground">
             Your rental history will appear here.
@@ -64,34 +61,28 @@ const CustomerRentalsPage = async () => {
             <TableBody>
               {rentalOrders.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell className="font-medium">
-                    {order.id}
-                  </TableCell>
+                  <TableCell className="font-medium">{order.id}</TableCell>
 
                   <TableCell>
-                    {new Date(
-                      order.startDate,
-                    ).toLocaleDateString()}{" "}
-                    -{" "}
-                    {new Date(
-                      order.endDate,
-                    ).toLocaleDateString()}
+                    {new Date(order.startDate).toLocaleDateString()} -{" "}
+                    {new Date(order.endDate).toLocaleDateString()}
                   </TableCell>
 
-                  <TableCell>
-                    {order.items.length}
-                  </TableCell>
+                  <TableCell>{order.items.length}</TableCell>
+
+                  <TableCell>${order.totalAmount}</TableCell>
+
+                  <TableCell>{order.status}</TableCell>
 
                   <TableCell>
-                    ${order.totalAmount}
-                  </TableCell>
-
-                  <TableCell>
-                    {order.status}
-                  </TableCell>
-
-                  <TableCell>
-                    View Details
+                    <Button>
+                      <a
+                        href={`/dashboard/customer/rentals/${order.id}`}
+                        className="text-white"
+                      >
+                        View Details
+                      </a>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

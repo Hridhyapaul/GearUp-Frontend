@@ -10,6 +10,7 @@ export interface RentalOrderGearItem {
   name: string;
   slug: string;
   image: string;
+  pricePerDay?: string;
 }
 
 export interface RentalOrderItem {
@@ -52,4 +53,13 @@ export interface RentalOrdersResponse {
   message: string;
   data: RentalOrder[];
   meta: RentalOrdersMeta;
+}
+
+export interface RentalOrderDetailResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    rentalOrder: RentalOrder;
+  };
 }

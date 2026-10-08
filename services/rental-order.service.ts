@@ -1,5 +1,8 @@
 import { apiRequest } from "@/lib/api";
-import type { RentalOrdersResponse } from "@/types/rental-order";
+import type {
+  RentalOrderDetailResponse,
+  RentalOrdersResponse,
+} from "@/types/rental-order";
 
 const getCustomerRentalOrders = async (
   token: string,
@@ -10,6 +13,17 @@ const getCustomerRentalOrders = async (
   });
 };
 
-export {
-  getCustomerRentalOrders,
+const getRentalOrderById = async (
+  token: string,
+  rentalOrderId: string,
+): Promise<RentalOrderDetailResponse> => {
+  return apiRequest<RentalOrderDetailResponse>(
+    `/rental-orders/${rentalOrderId}`,
+    {
+      method: "GET",
+      token,
+    },
+  );
 };
+
+export { getCustomerRentalOrders, getRentalOrderById };
