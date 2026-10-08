@@ -2,6 +2,7 @@ import { requireRole } from "@/lib/auth-guard";
 import { getAccessTokenCookie } from "@/lib/auth-cookie";
 import { getCustomerRentalOrders } from "@/services/rental-order.service";
 import { getCustomerPayments } from "@/services/payment.service";
+import { getReviews } from "@/services/review.service";
 
 const CustomerDashboardPage = async () => {
   const user = await requireRole(["CUSTOMER"]);
@@ -10,6 +11,7 @@ const CustomerDashboardPage = async () => {
   let totalRentals = 0;
   let activeRentals = 0;
   let totalPayments = 0;
+  let totalReviews = 0;
 
   if (accessToken) {
     const rentalResponse = await getCustomerRentalOrders(accessToken);
@@ -23,6 +25,12 @@ const CustomerDashboardPage = async () => {
     const paymentResponse = await getCustomerPayments(accessToken);
 
     totalPayments = paymentResponse.meta.total;
+
+    const reviewResponse = await getReviews(accessToken);
+
+    totalReviews = reviewResponse.data.filter(
+      (review) => review.customerId === user.id,
+    ).length;
   }
 
   return (
@@ -55,7 +63,7 @@ const CustomerDashboardPage = async () => {
         <div className="rounded-lg border p-5">
           <p className="text-sm text-muted-foreground">Reviews</p>
 
-          <p className="mt-2 text-2xl font-bold">0</p>
+          <p className="mt-2 text-2xl font-bold">{totalReviews}</p>
         </div>
       </section>
     </main>
