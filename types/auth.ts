@@ -50,6 +50,9 @@ export interface RegisterResponse {
 
 export interface CurrentUserResponse {
   success: boolean;
+  statusCode: number;
   message: string;
-  data: User;
+  data: {
+    user: User;
+  };
 }
