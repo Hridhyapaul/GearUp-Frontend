@@ -12,25 +12,41 @@ const CustomerDashboardPage = async () => {
   let activeRentals = 0;
   let totalPayments = 0;
   let totalReviews = 0;
+  let hasApiError = false;
 
   if (accessToken) {
-    const rentalResponse = await getCustomerRentalOrders(accessToken);
+    const [rentalResult, paymentResult, reviewResult] =
+      await Promise.allSettled([
+        getCustomerRentalOrders(accessToken),
+        getCustomerPayments(accessToken),
+        getReviews(accessToken),
+      ]);
 
-    totalRentals = rentalResponse.meta.total;
+    if (rentalResult.status === "fulfilled") {
+      const rentalResponse = rentalResult.value;
 
-    activeRentals = rentalResponse.data.filter(
-      (order) => order.status !== "RETURNED" && order.status !== "CANCELLED",
-    ).length;
+      totalRentals = rentalResponse.meta.total;
 
-    const paymentResponse = await getCustomerPayments(accessToken);
+      activeRentals = rentalResponse.data.filter(
+        (order) => order.status !== "RETURNED" && order.status !== "CANCELLED",
+      ).length;
+    } else {
+      hasApiError = true;
+    }
 
-    totalPayments = paymentResponse.meta.total;
+    if (paymentResult.status === "fulfilled") {
+      totalPayments = paymentResult.value.meta.total;
+    } else {
+      hasApiError = true;
+    }
 
-    const reviewResponse = await getReviews(accessToken);
-
-    totalReviews = reviewResponse.data.filter(
-      (review) => review.customerId === user.id,
-    ).length;
+    if (reviewResult.status === "fulfilled") {
+      totalReviews = reviewResult.value.data.filter(
+        (review) => review.customerId === user.id,
+      ).length;
+    } else {
+      hasApiError = true;
+    }
   }
 
   return (
@@ -41,28 +57,33 @@ const CustomerDashboardPage = async () => {
         <p className="mt-2 text-muted-foreground">Welcome back, {user.name}.</p>
       </div>
 
+      {hasApiError && (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+        >
+          Unable to load all dashboard statistics. Please try again later.
+        </div>
+      )}
+
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border p-5">
           <p className="text-sm text-muted-foreground">Total Rentals</p>
-
           <p className="mt-2 text-2xl font-bold">{totalRentals}</p>
         </div>
 
         <div className="rounded-lg border p-5">
           <p className="text-sm text-muted-foreground">Active Rentals</p>
-
           <p className="mt-2 text-2xl font-bold">{activeRentals}</p>
         </div>
 
         <div className="rounded-lg border p-5">
           <p className="text-sm text-muted-foreground">Total Payments</p>
-
           <p className="mt-2 text-2xl font-bold">{totalPayments}</p>
         </div>
 
         <div className="rounded-lg border p-5">
           <p className="text-sm text-muted-foreground">Reviews</p>
-
           <p className="mt-2 text-2xl font-bold">{totalReviews}</p>
         </div>
       </section>
