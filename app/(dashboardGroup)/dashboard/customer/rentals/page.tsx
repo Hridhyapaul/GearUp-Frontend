@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { RentalOrder } from "@/types/rental-order";
 import { Button } from "@/components/ui/button";
+import Link from "next/dist/client/link";
 
 const CustomerRentalsPage = async () => {
   await requireRole(["CUSTOMER"]);
@@ -75,13 +76,10 @@ const CustomerRentalsPage = async () => {
                   <TableCell>{order.status}</TableCell>
 
                   <TableCell>
-                    <Button>
-                      <a
-                        href={`/dashboard/customer/rentals/${order.id}`}
-                        className="text-white"
-                      >
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/dashboard/customer/rentals/${order.id}`}>
                         View Details
-                      </a>
+                      </Link>
                     </Button>
                   </TableCell>
                 </TableRow>
