@@ -31,3 +31,16 @@ export interface ProviderGearItemsResponse {
   message: string;
   data: GearItem[];
 }
+
+
+export type CreateGearItemInput = {
+  name: string;
+  slug: string;
+  description?: string;
+  pricePerDay: number;
+  stock: number;
+  availableStock: number;
+  image?: string;
+  categoryId: string;
+};
+
