@@ -44,3 +44,15 @@ export type CreateGearItemInput = {
   categoryId: string;
 };
 
+export type UpdateGearItemInput = {
+  name?: string;
+  slug?: string;
+  description?: string;
+  pricePerDay?: number;
+  stock?: number;
+  availableStock?: number;
+  image?: string;
+  isAvailable?: boolean;
+  categoryId?: string;
+};
+

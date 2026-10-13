@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import { cookies } from "next/headers";
 
@@ -17,6 +16,7 @@ import { getAllCategories } from "@/services/category.service";
 import { getProviderGearItems } from "@/services/gear-item.service";
 import type { Category } from "@/types/category";
 import type { GearItem } from "@/types/gear-item";
+import ProviderGearTableRow from "@/components/provider/ProviderGearTableRow";
 
 const ProviderGearPage = async () => {
   await requireRole(["PROVIDER"]);
@@ -53,20 +53,13 @@ const ProviderGearPage = async () => {
       </div>
 
       <section className="rounded-lg border p-5">
-        <p className="text-sm text-muted-foreground">
-          Total Gear Items
-        </p>
+        <p className="text-sm text-muted-foreground">Total Gear Items</p>
 
-        <p className="mt-2 text-2xl font-bold">
-          {gearItems.length}
-        </p>
+        <p className="mt-2 text-2xl font-bold">{gearItems.length}</p>
       </section>
 
       {token ? (
-        <ProviderGearPageContent
-          categories={categories}
-          token={token}
-        />
+        <ProviderGearPageContent categories={categories} token={token} />
       ) : (
         <p className="text-sm text-destructive">
           Authentication required to create a gear item.
@@ -83,6 +76,7 @@ const ProviderGearPage = async () => {
               <TableHead>Stock</TableHead>
               <TableHead>Available Stock</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -90,7 +84,7 @@ const ProviderGearPage = async () => {
             {gearItems.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={7}
                   className="h-24 text-center text-muted-foreground"
                 >
                   No gear items found.
@@ -98,45 +92,12 @@ const ProviderGearPage = async () => {
               </TableRow>
             ) : (
               gearItems.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={48}
-                        height={48}
-                        className="size-12 rounded-md object-cover"
-                      />
-
-                      <div className="space-y-1">
-                        <p className="font-medium">{item.name}</p>
-
-                        <p className="text-xs text-muted-foreground">
-                          {item.slug}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
-
-                  <TableCell>{item.category.name}</TableCell>
-
-                  <TableCell>${item.pricePerDay}</TableCell>
-
-                  <TableCell>{item.stock}</TableCell>
-
-                  <TableCell>{item.availableStock}</TableCell>
-
-                  <TableCell>
-                    <Badge
-                      variant={
-                        item.isAvailable ? "default" : "secondary"
-                      }
-                    >
-                      {item.isAvailable ? "Available" : "Unavailable"}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
+                <ProviderGearTableRow
+                  key={item.id}
+                  item={item}
+                  categories={categories}
+                  token={token!}
+                />
               ))
             )}
           </TableBody>

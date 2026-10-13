@@ -1,7 +1,9 @@
 import { apiRequest } from "@/lib/api";
 import type {
   CreateGearItemInput,
+  GearItem,
   ProviderGearItemsResponse,
+  UpdateGearItemInput,
 } from "@/types/gear-item";
 
 const getProviderGearItems = async (
@@ -13,10 +15,7 @@ const getProviderGearItems = async (
   });
 };
 
-const createGearItem = async (
-  token: string,
-  payload: CreateGearItemInput,
-) => {
+const createGearItem = async (token: string, payload: CreateGearItemInput) => {
   return apiRequest<{
     success: boolean;
     statusCode: number;
@@ -30,5 +29,36 @@ const createGearItem = async (
     body: JSON.stringify(payload),
   });
 };
+
+export const updateGearItem = async (
+  token: string,
+  id: string,
+  payload: UpdateGearItemInput,
+) =>
+  apiRequest<{
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: {
+      gearItem: GearItem;
+    };
+  }>(`/gear-items/${id}`, {
+    method: "PATCH",
+    token,
+    body: JSON.stringify(payload),
+  });
+
+export const deleteGearItem = async (token: string, id: string) =>
+  apiRequest<{
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: {
+      gearItem: GearItem;
+    };
+  }>(`/gear-items/${id}`, {
+    method: "DELETE",
+    token,
+  });
 
 export { createGearItem, getProviderGearItems };
