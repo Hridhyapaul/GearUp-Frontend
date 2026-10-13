@@ -69,3 +69,15 @@ export interface GearItemsResponse {
   };
 }
 
+
+export interface GearItemsQuery {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  categoryId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  isAvailable?: boolean;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}
