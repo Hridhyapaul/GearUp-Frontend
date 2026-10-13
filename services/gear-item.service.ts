@@ -2,9 +2,22 @@ import { apiRequest } from "@/lib/api";
 import type {
   CreateGearItemInput,
   GearItem,
+  GearItemsResponse,
   ProviderGearItemsResponse,
   UpdateGearItemInput,
 } from "@/types/gear-item";
+
+const getGearItems = async (
+  page = 1,
+  limit = 8,
+): Promise<GearItemsResponse> => {
+  return apiRequest<GearItemsResponse>(
+    `/gear-items?page=${page}&limit=${limit}`,
+    {
+      method: "GET",
+    },
+  );
+};
 
 const getProviderGearItems = async (
   token: string,
@@ -61,4 +74,4 @@ export const deleteGearItem = async (token: string, id: string) =>
     token,
   });
 
-export { createGearItem, getProviderGearItems };
+export { createGearItem, getProviderGearItems, getGearItems };

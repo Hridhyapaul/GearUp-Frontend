@@ -3,6 +3,7 @@ import type {
   RentalOrder,
   RentalOrderDetailResponse,
   RentalOrdersResponse,
+  RentalOrderStatus,
 } from "@/types/rental-order";
 
 const getCustomerRentalOrders = async (
@@ -43,4 +44,24 @@ const getProviderRentalOrders = async (
   return response.data;
 };
 
-export { getCustomerRentalOrders, getRentalOrderById, getProviderRentalOrders };
+const updateProviderRentalOrderStatus = async (
+  token: string,
+  rentalOrderId: string,
+  status: RentalOrderStatus,
+): Promise<RentalOrderDetailResponse> => {
+  return apiRequest<RentalOrderDetailResponse>(
+    `/rental-orders/${rentalOrderId}/status`,
+    {
+      method: "PATCH",
+      token,
+      body: JSON.stringify({ status }),
+    },
+  );
+};
+
+export {
+  getCustomerRentalOrders,
+  getRentalOrderById,
+  getProviderRentalOrders,
+  updateProviderRentalOrderStatus,
+};

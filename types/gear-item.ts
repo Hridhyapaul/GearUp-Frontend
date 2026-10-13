@@ -56,3 +56,16 @@ export type UpdateGearItemInput = {
   categoryId?: string;
 };
 
+export interface GearItemsResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: GearItem[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
